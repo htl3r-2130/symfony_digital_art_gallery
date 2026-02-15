@@ -17,12 +17,13 @@ VOLUME /app/var/
 
 # persistent / runtime deps
 # hadolint ignore=DL3008
-RUN apt-get update && apt-get install -y --no-install-recommends \
-	file \
-	git \
-	&& rm -rf /var/lib/apt/lists/*
-
 RUN set -eux; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
+		file \
+		git \
+	; \
+	rm -rf /var/lib/apt/lists/*; \
 	install-php-extensions \
 		@composer \
 		apcu \
@@ -34,15 +35,9 @@ RUN set -eux; \
 # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# Transport to use by Mercure (default to Bolt)
-ENV MERCURE_TRANSPORT_URL=bolt:///data/mercure.db
-
 ENV PHP_INI_SCAN_DIR=":$PHP_INI_DIR/app.conf.d"
 
 ###> recipes ###
-###> doctrine/doctrine-bundle ###
-RUN install-php-extensions pdo_pgsql
-###< doctrine/doctrine-bundle ###
 ###< recipes ###
 
 COPY --link frankenphp/conf.d/10-app.ini $PHP_INI_DIR/app.conf.d/
@@ -51,7 +46,7 @@ COPY --link frankenphp/Caddyfile /etc/frankenphp/Caddyfile
 
 ENTRYPOINT ["docker-entrypoint"]
 
-HEALTHCHECK --start-period=60s CMD curl -f http://localhost:2019/metrics || exit 1
+HEALTHCHECK --start-period=60s CMD curl http://localhost:2019/metrics --silent --show-error --fail --output /dev/null || exit 1
 CMD [ "frankenphp", "run", "--config", "/etc/frankenphp/Caddyfile" ]
 
 # Dev FrankenPHP image
@@ -94,4 +89,7 @@ RUN set -eux; \
 	composer dump-autoload --classmap-authoritative --no-dev; \
 	composer dump-env prod; \
 	composer run-script --no-dev post-install-cmd; \
+	if [ -f importmap.php ]; then \
+		php bin/console asset-map:compile; \
+	fi; \
 	chmod +x bin/console; sync;

@@ -5,7 +5,6 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use \DateTime;
 
 final class ArtworkController extends AbstractController
 {
@@ -63,29 +62,27 @@ final class ArtworkController extends AbstractController
     #[Route('/artwork/current', name: 'currentArtwork')]
     public function currentArtwork(): Response
     {
-        return $this->render('artwork/current.html.twig', [
-            'controller_name' => 'ArtworkController',
+        return $this->render('artwork/artwork.html.twig', [
             'artwork' => $this->artworks[0]
         ]);
     }
 
-    #[Route('/artwork', name: 'allArtworks')]
+    #[Route("/artwork", name: "allArtworks")]
     public function allArtworks(): Response
     {
-        return $this->render('artwork/all.html.twig', [
-            'controller_name' => 'ArtworkController',
+        return $this->render("artwork/all.html.twig", [
             'artworks' => $this->artworks
         ]);
     }
 
     #[Route('/artwork/{id}', name: 'idArtwork')]
-    public function artworkById(?int $id): Response
+    public function artworkById(int $id): Response
     {
         if (!isset($this->artworks[$id - 1])) {
             throw $this->createNotFoundException('Artwork not found');
         }
 
-        return $this->render('artwork/index.html.twig', [
+        return $this->render('artwork/artwork.html.twig', [
             'controller_name' => 'ArtworkController',
             'artwork' => $this->artworks[$id - 1]
         ]);
