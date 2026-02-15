@@ -1,6 +1,9 @@
 <?php
 
-require_once 'Artwork.php'; // Make sure to include the Artwork class
+use App\Entity\Artwork;
+use DateTime;
+
+require_once 'Artwork.php';
 
 class ArtworkSeeder
 {
@@ -12,48 +15,54 @@ class ArtworkSeeder
     public function seed(): array
     {
         $artworksData = [
-            [
-                'title' => 'Empowered Cat',
-                'artistName' => 'Jiln H\'derer',
-                'creationDate' => new DateTime('1889-06-01'),
-                'description' => 'A famous painting depicting a strong independent cat.',
-                'imagePath' => '/images/01-image.jpg',
-            ],
-            [
-                'title' => 'Elephants of the Mahi\'ckl Tribe',
-                'artistName' => 'Chief Mahu of the Mahi\'ckl Tribe',
-                'creationDate' => new DateTime('1801-01-01'),
-                'description' => 'A tribal classic.',
-                'imagePath' => '/images/02-image.jpg',
-            ],
-            [
-                'title' => 'The Ordeal',
-                'artistName' => 'Christ Monhandi',
-                'creationDate' => new DateTime('1931-01-01'),
-                'description' => 'Modern painting featuring a chill dog.',
-                'imagePath' => '/images/03-image.jpg',
-            ],
-            [
-                'title' => 'The Ordeal',
-                'artistName' => 'Christ Monhandi',
-                'creationDate' => new DateTime('1931-01-01'),
-                'description' => 'Modern painting featuring a chill dog.',
-                'imagePath' => '/images/04-image.jpg',
-            ],
-            [
-                'title' => 'The Ordeal',
-                'artistName' => 'Christ Monhandi',
-                'creationDate' => new DateTime('1931-01-01'),
-                'description' => 'Modern painting featuring a chill dog.',
-                'imagePath' => '/images/05-image.jpg',
-            ],
-            [
-                'title' => 'The Ordeal',
-                'artistName' => 'Christ Monhandi',
-                'creationDate' => new DateTime('1931-01-01'),
-                'description' => 'Modern painting featuring a chill dog.',
-                'imagePath' => '/images/06-image.jpg',
-            ],
+            new Artwork(
+                1,
+                'Empowered Cat',
+                'Jiln H\'derer',
+                new DateTime('1889-06-01'),
+                'A famous painting depicting a strong independent cat.',
+                '/images/01-image.jpg'
+            ),
+            new Artwork(
+                2,
+                'Elephants of the Mahi\'ckl Tribe',
+                'Chief Mahu of the Mahi\'ckl Tribe',
+                new DateTime('1801-01-01'),
+                'A tribal classic.',
+                '/images/02-image.jpg'
+            ),
+            new Artwork(
+                3,
+                'The Ordeal',
+                'Christ Monhandi',
+                new DateTime('1931-01-01'),
+                'Modern painting featuring a chill dog.',
+                '/images/03-image.jpg'
+            ),
+            new Artwork(
+                4,
+                'The Ordeal',
+                'Christ Monhandi',
+                new DateTime('1931-01-01'),
+                'Modern painting featuring a chill dog.',
+                '/images/04-image.jpg'
+            ),
+            new Artwork(
+                5,
+                'The Ordeal',
+                'Christ Monhandi',
+                new DateTime('1931-01-01'),
+                'Modern painting featuring a chill dog.',
+                '/images/05-image.jpg'
+            ),
+            new Artwork(
+                6,
+                'The Ordeal',
+                'Christ Monhandi',
+                new DateTime('1931-01-01'),
+                'Modern painting featuring a chill dog.',
+                '/images/06-image.jpg'
+            )
         ];
 
         $artworks = [];

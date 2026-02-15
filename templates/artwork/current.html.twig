@@ -12,7 +12,7 @@
     </tr>
     <tr>
         <th>Creation Date</th>
-        <td>{{ artwork.creationDate|date('Y-m-d') }}</td>
+        <td>{{ artwork.creationDate }}</td>
     </tr>
     <tr>
         <th>Description</th>
@@ -25,3 +25,5 @@
         </td>
     </tr>
 </table>
+
+<a href="{{ path('home') }}">Zurück zur Startseite</a>

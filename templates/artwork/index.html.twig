@@ -1,0 +1,27 @@
+{# index.html.twig #}
+<h2>Current Artwork</h2>
+
+<table border="1">
+    <tr>
+        <th>Title</th>
+        <td>{{ artwork.title }}</td>
+    </tr>
+    <tr>
+        <th>Artist</th>
+        <td>{{ artwork.artistName }}</td>
+    </tr>
+    <tr>
+        <th>Creation Date</th>
+        <td>{{ artwork.creationDate }}</td>
+    </tr>
+    <tr>
+        <th>Description</th>
+        <td>{{ artwork.description }}</td>
+    </tr>
+    <tr>
+        <th>Image</th>
+        <td>
+            <img src="{{ artwork.imagePath }}" alt="{{ artwork.title }}" width="300">
+        </td>
+    </tr>
+</table>
