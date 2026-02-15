@@ -11,6 +11,7 @@ final class ArtworkController extends AbstractController
 {
     private array $artworks = [
         [
+            'id' => 1,
             'title' => 'Empowered Cat',
             'artistName' => 'Jiln H\'derer',
             'creationDate' => '1889-06-01',
@@ -18,6 +19,7 @@ final class ArtworkController extends AbstractController
             'imagePath' => '/images/01-image.jpg',
         ],
         [
+            'id' => 2,
             'title' => 'Elephants of the Mahi\'ckl Tribe',
             'artistName' => 'Chief Mahu of the Mahi\'ckl Tribe',
             'creationDate' => '1801-01-01',
@@ -25,6 +27,7 @@ final class ArtworkController extends AbstractController
             'imagePath' => '/images/02-image.jpg',
         ],
         [
+            'id' => 3,
             'title' => 'The Ordeal',
             'artistName' => 'Christ Monhandi',
             'creationDate' => '1931-01-01',
@@ -32,6 +35,7 @@ final class ArtworkController extends AbstractController
             'imagePath' => '/images/03-image.jpg',
         ],
         [
+            'id' => 4,
             'title' => 'The Ordeal',
             'artistName' => 'Christ Monhandi',
             'creationDate' => '1931-01-01',
@@ -39,6 +43,7 @@ final class ArtworkController extends AbstractController
             'imagePath' => '/images/04-image.jpg',
         ],
         [
+            'id' => 5,
             'title' => 'The Ordeal',
             'artistName' => 'Christ Monhandi',
             'creationDate' => '1931-01-01',
@@ -46,6 +51,7 @@ final class ArtworkController extends AbstractController
             'imagePath' => '/images/05-image.jpg',
         ],
         [
+            'id' => 6,
             'title' => 'The Ordeal',
             'artistName' => 'Christ Monhandi',
             'creationDate' => '1931-01-01',
