@@ -8,6 +8,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+use App\Form\ArtworkType;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
+
+use App\Entity\Artwork;
+
 class ArtworkController extends AbstractController
 {
     #[Route('/artworks', name: 'artwork_index')]
@@ -17,6 +23,26 @@ class ArtworkController extends AbstractController
 
         return $this->render('index.html.twig', [
             'artworks' => $artworks,
+        ]);
+    }
+
+    #[Route('/artworks/new', name: 'artwork_new')]
+    public function new(Request $request, EntityManagerInterface $em): Response
+    {
+        $artwork = new Artwork();
+        $form = $this->createForm(ArtworkType::class, $artwork);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($artwork);
+            $em->flush();
+
+            return $this->redirectToRoute('artwork_index');
+        }
+
+        return $this->render('new.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
