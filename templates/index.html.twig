@@ -6,6 +6,14 @@
     <main>
         <h1>Artworks</h1>
 
+        <form method="get" action="{{ path('artwork_index') }}">
+            <input type="text" name="search" value="{{ search }}" placeholder="Search by title...">
+            <button type="submit">Search</button>
+        </form>
+
+        <a href="{{ path('artwork_index', { sort: 'ASC' }) }}">Oldest first</a>
+        <a href="{{ path('artwork_index', { sort: 'DESC' }) }}">Newest first</a>
+
         {% if artworks is empty %}
             <p>No artworks found.</p>
         {% else %}

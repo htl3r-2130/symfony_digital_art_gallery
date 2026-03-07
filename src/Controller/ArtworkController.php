@@ -17,12 +17,21 @@ use App\Entity\Artwork;
 class ArtworkController extends AbstractController
 {
     #[Route('/artworks', name: 'artwork_index')]
-    public function index(ArtworkRepository $artworkRepository): Response
+    public function index(Request $request, ArtworkRepository $artworkRepository): Response
     {
-        $artworks = $artworkRepository->findAll();
+        $sort = $request->query->get('sort', 'ASC');
+        $search = $request->query->get('search', '');
+
+        if ($search) {
+            $artworks = $artworkRepository->findByTitle($search);
+        } else {
+            $artworks = $artworkRepository->findAllSortedByDate($sort);
+        }
 
         return $this->render('index.html.twig', [
             'artworks' => $artworks,
+            'sort' => $sort,
+            'search' => $search,
         ]);
     }
 
