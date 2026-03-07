@@ -8,6 +8,8 @@ use App\Entity\Artwork;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
+use App\Entity\VirtualTours;
+
 class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
@@ -87,6 +89,21 @@ class AppFixtures extends Fixture
         $artwork5->setCreationDate(new \DateTime('1931-01-01'));
         $artwork5->setArtist($artist5);
         $manager->persist($artwork5);
+
+        $tour1 = new VirtualTours();
+        $tour1->setTitle('Classic Masters');
+        $tour1->setDescription('A tour through classical artworks.');
+        $tour1->addArtwork($artwork1);
+        $tour1->addArtwork($artwork2);
+        $manager->persist($tour1);
+
+        $tour2 = new VirtualTours();
+        $tour2->setTitle('Modern Expressions');
+        $tour2->setDescription('Contemporary art from the 20th century.');
+        $tour2->addArtwork($artwork3);
+        $tour2->addArtwork($artwork4);
+        $tour2->addArtwork($artwork5);
+        $manager->persist($tour2);
 
         $manager->flush();
     }

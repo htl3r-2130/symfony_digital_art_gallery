@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ tour.title }}{% endblock %}
+
+{% block body %}
+    <main>
+        <h1>{{ tour.title }}</h1>
+        <p>{{ tour.description }}</p>
+
+        <h2>Artworks in this Tour</h2>
+        {% if tour.artworks is empty %}
+            <p>No artworks in this tour.</p>
+        {% else %}
+            <ul>
+                {% for artwork in tour.artworks %}
+                    <li>
+                        <img src="{{ artwork.imagePath }}" alt="{{ artwork.title }}">
+                        <h3>{{ artwork.title }}</h3>
+                        <p>{{ artwork.description }}</p>
+                        <p>Artist: <a href="{{ path('artist_show', { id: artwork.artist.id }) }}">{{ artwork.artist.firstName }} {{ artwork.artist.lastName }}</a></p>
+                        <a href="{{ path('artwork_show', { id: artwork.id }) }}">View details</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <a href="{{ path('tour_index') }}">← Back to Tours</a>
+    </main>
+{% endblock %}

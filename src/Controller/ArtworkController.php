@@ -28,7 +28,7 @@ class ArtworkController extends AbstractController
             $artworks = $artworkRepository->findAllSortedByDate($sort);
         }
 
-        return $this->render('index.html.twig', [
+        return $this->render('artwork/index.html.twig', [
             'artworks' => $artworks,
             'sort' => $sort,
             'search' => $search,
@@ -50,7 +50,7 @@ class ArtworkController extends AbstractController
             return $this->redirectToRoute('artwork_index');
         }
 
-        return $this->render('new.html.twig', [
+        return $this->render('artwork/new.html.twig', [
             'form' => $form->createView(),
         ]);
     }
@@ -64,7 +64,7 @@ class ArtworkController extends AbstractController
             throw $this->createNotFoundException('Artwork not found.');
         }
 
-        return $this->render('show.html.twig', [
+        return $this->render('artwork/show.html.twig', [
             'artwork' => $artwork,
         ]);
     }
@@ -87,7 +87,7 @@ class ArtworkController extends AbstractController
             return $this->redirectToRoute('artwork_index');
         }
 
-        return $this->render('edit.html.twig', [
+        return $this->render('artwork/edit.html.twig', [
             'form' => $form->createView(),
             'artwork' => $artwork,
         ]);
@@ -109,7 +109,7 @@ class ArtworkController extends AbstractController
             return $this->redirectToRoute('artwork_index');
         }
 
-        return $this->render('delete.html.twig', [
+        return $this->render('artwork/delete.html.twig', [
             'artwork' => $artwork,
         ]);
     }

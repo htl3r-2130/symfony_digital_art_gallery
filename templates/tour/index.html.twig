@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Virtual Tours{% endblock %}
+
+{% block body %}
+    <main>
+        <h1>Virtual Tours</h1>
+
+        {% if tours is empty %}
+            <p>No tours available.</p>
+        {% else %}
+            <ul>
+                {% for tour in tours %}
+                    <li>
+                        <h2>{{ tour.title }}</h2>
+                        <p>{{ tour.description }}</p>
+                        <a href="{{ path('tour_show', { id: tour.id }) }}">Enter Tour</a>
+                    </li>
+                {% endfor %}
+        {% endif %}
+    </main>
+{% endblock %}

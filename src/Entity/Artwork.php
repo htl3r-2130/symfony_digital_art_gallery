@@ -4,10 +4,14 @@ namespace App\Entity;
 
 use App\Repository\ArtworkRepository;
 use BcMath\Number;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ArtworkRepository::class)]
+#[ORM\Index(name: 'idx_title', columns: ['title'])]
+#[ORM\Index(name: 'idx_creation_date', columns: ['creation_date'])]
 class Artwork
 {
     #[ORM\Id]
@@ -29,6 +33,17 @@ class Artwork
 
     #[ORM\ManyToOne(inversedBy: 'artworks')]
     private ?Artist $artist = null;
+
+    /**
+     * @var Collection<int, VirtualTours>
+     */
+    #[ORM\ManyToMany(targetEntity: VirtualTours::class, mappedBy: 'artworks')]
+    private Collection $virtualTours;
+
+    public function __construct()
+    {
+        $this->virtualTours = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -98,6 +113,33 @@ class Artwork
     public function setArtist(?Artist $artist): static
     {
         $this->artist = $artist;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, VirtualTours>
+     */
+    public function getVirtualTours(): Collection
+    {
+        return $this->virtualTours;
+    }
+
+    public function addVirtualTour(VirtualTours $virtualTour): static
+    {
+        if (!$this->virtualTours->contains($virtualTour)) {
+            $this->virtualTours->add($virtualTour);
+            $virtualTour->addArtwork($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVirtualTour(VirtualTours $virtualTour): static
+    {
+        if ($this->virtualTours->removeElement($virtualTour)) {
+            $virtualTour->removeArtwork($this);
+        }
 
         return $this;
     }

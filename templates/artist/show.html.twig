@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ artist.firstName }} {{ artist.lastName }}{% endblock %}
+
+{% block body %}
+    <main>
+        <h1>{{ artist.firstName }} {{ artist.lastName }}</h1>
+        <p>Born: {{ artist.birthDate|date('Y') }}</p>
+
+        <h2>Artworks</h2>
+        {% if artist.artworks is empty %}
+            <p>No artworks found.</p>
+        {% else %}
+            <ul>
+                {% for artwork in artist.artworks %}
+                    <li>
+                        <img src="{{ artwork.imagePath }}" alt="{{ artwork.title }}">
+                        <h3>{{ artwork.title }}</h3>
+                        <p>{{ artwork.description }}</p>
+                        <a href="{{ path('artwork_show', { id: artwork.id }) }}">View details</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <a href="{{ path('artist_index') }}">← Back to Artists</a>
+    </main>
+{% endblock %}

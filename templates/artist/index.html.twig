@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Artists{% endblock %}
+
+{% block body %}
+    <main>
+        <h1>Artists</h1>
+
+        {% if artists is empty %}
+            <p>No artists found.</p>
+        {% else %}
+            <ul>
+                {% for artist in artists %}
+                    <li>
+                        <h2>{{ artist.firstName }} {{ artist.lastName }}</h2>
+                        <p>Born: {{ artist.birthDate|date('Y') }}</p>
+                        <a href="{{ path('artist_show', { id: artist.id }) }}">View Profile</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </main>
+{% endblock %}
