@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Delete – {{ artwork.title }}{% endblock %}
+
+{% block body %}
+    <main>
+        <h2>Are you sure you want to delete "{{ artwork.title }}"?</h2>
+
+        <form method="post" action="{{ path('artwork_delete', { id: artwork.id }) }}">
+            <button type="submit">Yes, delete</button>
+        </form>
+
+        <a href="{{ path('artwork_index') }}">No, go back</a>
+    </main>
+{% endblock %}

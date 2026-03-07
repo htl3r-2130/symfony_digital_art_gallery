@@ -68,4 +68,49 @@ class ArtworkController extends AbstractController
             'artwork' => $artwork,
         ]);
     }
+
+    #[Route('/artworks/{id}/edit', name: 'artwork_edit')]
+    public function edit(Request $request, EntityManagerInterface $em, ArtworkRepository $artworkRepository, int $id): Response
+    {
+        $artwork = $artworkRepository->find($id);
+
+        if (!$artwork) {
+            throw $this->createNotFoundException('Artwork not found.');
+        }
+
+        $form = $this->createForm(ArtworkType::class, $artwork);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+
+            return $this->redirectToRoute('artwork_index');
+        }
+
+        return $this->render('edit.html.twig', [
+            'form' => $form->createView(),
+            'artwork' => $artwork,
+        ]);
+    }
+
+    #[Route('/artworks/{id}/delete', name: 'artwork_delete')]
+    public function delete(Request $request, EntityManagerInterface $em, ArtworkRepository $artworkRepository, int $id): Response
+    {
+        $artwork = $artworkRepository->find($id);
+
+        if (!$artwork) {
+            throw $this->createNotFoundException('Artwork not found.');
+        }
+
+        if ($request->isMethod('POST')) {
+            $em->remove($artwork);
+            $em->flush();
+
+            return $this->redirectToRoute('artwork_index');
+        }
+
+        return $this->render('delete.html.twig', [
+            'artwork' => $artwork,
+        ]);
+    }
 }

@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit – {{ artwork.title }}{% endblock %}
+
+{% block body %}
+    <main>
+        <h1>Edit: {{ artwork.title }}</h1>
+
+        {{ form_start(form) }}
+            {{ form_row(form.title) }}
+            {{ form_row(form.description) }}
+            {{ form_row(form.imagePath) }}
+            {{ form_row(form.creationDate) }}
+            {{ form_row(form.artist) }}
+            {{ form_row(form.submit) }}
+        {{ form_end(form) }}
+
+        <a href="{{ path('artwork_index') }}">← Back to Gallery</a>
+    </main>
+{% endblock %}
