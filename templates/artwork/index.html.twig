@@ -1,33 +1,56 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gallery – All Artworks{% endblock %}
+{% block title %}Gallery – All Artworks
+{% endblock %}
 
 {% block body %}
-    <main>
-        <h1>Artworks</h1>
+	<main>
+		<h1>Artworks</h1>
 
-        <form method="get" action="{{ path('artwork_index') }}">
-            <input type="text" name="search" value="{{ search }}" placeholder="Search by title...">
-            <button type="submit">Search</button>
-        </form>
+		<form method="get" action="{{ path('artwork_index') }}">
+			<input type="text" name="search" value="{{ search }}" placeholder="Search by title...">
+			<button type="submit">Search</button>
+		</form>
 
-        <a href="{{ path('artwork_index', { sort: 'ASC' }) }}">Oldest first</a>
-        <a href="{{ path('artwork_index', { sort: 'DESC' }) }}">Newest first</a>
+		<a href="{{ path('artwork_index', { sort: 'ASC' }) }}">Oldest first</a>
+		<a href="{{ path('artwork_index', { sort: 'DESC' }) }}">Newest first</a>
 
-        {% if artworks is empty %}
-            <p>No artworks found.</p>
-        {% else %}
-            <ul>
-                {% for artwork in artworks %}
-                    <li>
-                        <h2>{{ artwork.title }}</h2>
-                        <p>{{ artwork.description }}</p>
-                        <p>Artist: {{ artwork.artist.firstName }} {{ artwork.artist.lastName }}</p>
-                        <a href="{{ path('artwork_show', { id: artwork.id }) }}">View details</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-        <a href="{{ path('artwork_new') }}">+ Add Artwork</a>
-    </main>
+		{% if artworks is empty %}
+			<p>No artworks found.</p>
+		{% else %}
+			<ul>
+				{% for artwork in artworks %}
+					<li>
+						<h2>{{ artwork.title }}</h2>
+						<p>{{ artwork.description }}</p>
+						<p>Artist:
+							{{ artwork.artist.firstName }}
+							{{ artwork.artist.lastName }}</p>
+						<a href="{{ path('artwork_show', { id: artwork.id }) }}">View details</a>
+					</li>
+				{% endfor %}
+			</ul>
+			<div class="pagination">
+
+				{% if currentPage > 1 %}
+					<a href="{{ path('artwork_index', { page: currentPage - 1, sort: sort, search: search }) }}">
+						Previous
+					</a>
+				{% endif %}
+
+				<span>Page
+					{{ currentPage }}
+					of
+					{{ totalPages }}</span>
+
+				{% if currentPage < totalPages %}
+					<a href="{{ path('artwork_index', { page: currentPage + 1, sort: sort, search: search }) }}">
+						Next
+					</a>
+				{% endif %}
+
+			</div>
+		{% endif %}
+		<a href="{{ path('artwork_new') }}">+ Add Artwork</a>
+	</main>
 {% endblock %}

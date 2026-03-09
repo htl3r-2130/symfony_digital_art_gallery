@@ -25,7 +25,7 @@ class ArtworkRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    
+
     public function findAllSortedByDate(string $order = 'ASC'): array
     {
         return $this->createQueryBuilder('a')
@@ -41,5 +41,23 @@ class ArtworkRepository extends ServiceEntityRepository
             ->setParameter('keyword', '%' . $keyword . '%')
             ->getQuery()
             ->getResult();
+    }
+
+    public function findPaginated(int $page = 1, int $limit = 5)
+    {
+        return $this->createQueryBuilder('a')
+            ->orderBy('a.creationDate', 'DESC')
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function countAll(): int
+    {
+        return $this->createQueryBuilder('a')
+            ->select('COUNT(a.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }

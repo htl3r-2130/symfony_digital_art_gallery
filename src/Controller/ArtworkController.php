@@ -21,17 +21,26 @@ class ArtworkController extends AbstractController
     {
         $sort = $request->query->get('sort', 'ASC');
         $search = $request->query->get('search', '');
+        $page = $request->query->getInt('page', 1);
+
+        $limit = 5;
 
         if ($search) {
             $artworks = $artworkRepository->findByTitle($search);
+            $total = count($artworks);
         } else {
-            $artworks = $artworkRepository->findAllSortedByDate($sort);
+            $artworks = $artworkRepository->findPaginated($page, $limit);
+            $total = $artworkRepository->countAll();
         }
+
+        $totalPages = ceil($total / $limit);
 
         return $this->render('artwork/index.html.twig', [
             'artworks' => $artworks,
             'sort' => $sort,
             'search' => $search,
+            'currentPage' => $page,
+            'totalPages' => $totalPages
         ]);
     }
 
