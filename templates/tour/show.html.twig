@@ -3,27 +3,198 @@
 {% block title %}{{ tour.title }}{% endblock %}
 
 {% block body %}
-    <main>
-        <h1>{{ tour.title }}</h1>
-        <p>{{ tour.description }}</p>
+<div class="page-content">
 
-        <h2>Artworks in this Tour</h2>
-        {% if tour.artworks is empty %}
+    <a href="{{ path('tour_index') }}" class="back-link">← Tours</a>
+
+    <div class="tour-header">
+        <h1 class="tour-title">{{ tour.title }}</h1>
+        <p class="tour-desc">{{ tour.description }}</p>
+    </div>
+
+    <div class="section-label-row">
+        <span class="section-label">Artworks</span>
+        <span class="section-count">{{ tour.artworks|length }}</span>
+    </div>
+
+    {% if tour.artworks is empty %}
+        <div class="empty-state">
             <p>No artworks in this tour.</p>
-        {% else %}
-            <ul>
-                {% for artwork in tour.artworks %}
-                    <li>
-                        <img src="{{ artwork.imagePath }}" alt="{{ artwork.title }}">
-                        <h3>{{ artwork.title }}</h3>
-                        <p>{{ artwork.description }}</p>
-                        <p>Artist: <a href="{{ path('artist_show', { id: artwork.artist.id }) }}">{{ artwork.artist.firstName }} {{ artwork.artist.lastName }}</a></p>
-                        <a href="{{ path('artwork_show', { id: artwork.id }) }}">View details</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+        </div>
+    {% else %}
+        <div class="artwork-list">
+            {% for artwork in tour.artworks %}
+                <div class="artwork-row">
+                    {% if artwork.imagePath %}
+                        <div class="artwork-thumb">
+                            <img src="{{ artwork.imagePath }}" alt="{{ artwork.title }}">
+                        </div>
+                    {% endif %}
+                    <div class="artwork-info">
+                        <span class="artwork-title">{{ artwork.title }}</span>
+                        <span class="artwork-desc">{{ artwork.description|slice(0, 80) }}{% if artwork.description|length > 80 %}…{% endif %}</span>
+                        <a href="{{ path('artist_show', { id: artwork.artist.id }) }}" class="artwork-artist">
+                            {{ artwork.artist.firstName }} {{ artwork.artist.lastName }}
+                        </a>
+                    </div>
+                    <a href="{{ path('artwork_show', { id: artwork.id }) }}" class="artwork-link">View →</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 
-        <a href="{{ path('tour_index') }}">← Back to Tours</a>
-    </main>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .page-content {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 2.5rem 2rem;
+    }
+
+    .back-link {
+        display: inline-block;
+        font-size: 0.82rem;
+        color: var(--text-secondary);
+        text-decoration: none;
+        margin-bottom: 2rem;
+        transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--text); }
+
+    .tour-header {
+        margin-bottom: 2.5rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    .tour-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+    }
+
+    .tour-desc {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        line-height: 1.6;
+        max-width: 560px;
+    }
+
+    .section-label-row {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 1rem;
+    }
+
+    .section-label {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .section-count {
+        font-size: 0.72rem;
+        font-weight: 500;
+        color: var(--text-tertiary);
+        background: var(--bg-secondary);
+        border-radius: 980px;
+        padding: 0.1rem 0.5rem;
+    }
+
+    .artwork-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        background: var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+    }
+
+    .artwork-row {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.25rem;
+        background: var(--bg);
+    }
+
+    .artwork-thumb {
+        width: 52px;
+        height: 52px;
+        border-radius: 8px;
+        overflow: hidden;
+        background: var(--bg-secondary);
+        flex-shrink: 0;
+    }
+
+    .artwork-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .artwork-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+
+    .artwork-title {
+        font-size: 0.88rem;
+        font-weight: 500;
+        letter-spacing: -0.01em;
+        color: var(--text);
+    }
+
+    .artwork-desc {
+        font-size: 0.75rem;
+        color: var(--text-tertiary);
+        line-height: 1.4;
+    }
+
+    .artwork-artist {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: color 0.15s;
+        margin-top: 0.1rem;
+    }
+
+    .artwork-artist:hover { color: var(--text); }
+
+    .artwork-link {
+        font-size: 0.78rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+        text-decoration: none;
+        white-space: nowrap;
+        transition: color 0.15s, transform 0.2s;
+        display: inline-block;
+    }
+
+    .artwork-link:hover {
+        color: var(--text);
+        transform: translateX(3px);
+    }
+
+    .empty-state {
+        padding: 3rem 2rem;
+        text-align: center;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+</style>
 {% endblock %}

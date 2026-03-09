@@ -3,13 +3,120 @@
 {% block title %}Delete – {{ artwork.title }}{% endblock %}
 
 {% block body %}
-    <main>
-        <h2>Are you sure you want to delete "{{ artwork.title }}"?</h2>
+<div class="page-content">
 
-        <form method="post" action="{{ path('artwork_delete', { id: artwork.id }) }}">
-            <button type="submit">Yes, delete</button>
-        </form>
+    <a href="{{ path('artwork_index') }}" class="back-link">← Gallery</a>
 
-        <a href="{{ path('artwork_index') }}">No, go back</a>
-    </main>
+    <div class="confirm-card">
+        <div class="confirm-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+
+        <h1 class="confirm-title">Delete artwork?</h1>
+        <p class="confirm-desc">
+            <strong>{{ artwork.title }}</strong> will be permanently removed. This cannot be undone.
+        </p>
+
+        <div class="confirm-actions">
+            <form method="post" action="{{ path('artwork_delete', { id: artwork.id }) }}">
+                <button type="submit" class="btn-delete">Delete</button>
+            </form>
+            <a href="{{ path('artwork_index') }}" class="btn-cancel">Cancel</a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .page-content {
+        max-width: 480px;
+        margin: 0 auto;
+        padding: 2.5rem 2rem;
+    }
+
+    .back-link {
+        display: inline-block;
+        font-size: 0.82rem;
+        color: var(--text-secondary);
+        text-decoration: none;
+        margin-bottom: 2rem;
+        transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--text); }
+
+    .confirm-card {
+        background: var(--bg);
+        border: 1px solid rgba(209, 48, 48, 0.2);
+        border-radius: 16px;
+        padding: 2.5rem 2rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .confirm-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: #FFF0F0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #D13030;
+        margin-bottom: 0.5rem;
+    }
+
+    .confirm-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+    }
+
+    .confirm-desc {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+        max-width: 320px;
+    }
+
+    .confirm-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        align-items: center;
+    }
+
+    .btn-delete {
+        padding: 0.6rem 1.4rem;
+        font-size: 0.82rem;
+        font-weight: 500;
+        font-family: var(--font);
+        background: #D13030;
+        color: #fff;
+        border: none;
+        border-radius: 980px;
+        cursor: pointer;
+        transition: opacity 0.2s;
+    }
+
+    .btn-delete:hover { opacity: 0.85; }
+
+    .btn-cancel {
+        padding: 0.6rem 1.4rem;
+        font-size: 0.82rem;
+        font-weight: 500;
+        background: var(--bg-secondary);
+        color: var(--text);
+        border-radius: 980px;
+        text-decoration: none;
+        transition: background 0.15s;
+    }
+
+    .btn-cancel:hover { background: #E5E5EA; }
+</style>
 {% endblock %}

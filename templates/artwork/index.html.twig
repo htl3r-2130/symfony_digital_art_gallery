@@ -1,56 +1,254 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gallery – All Artworks
-{% endblock %}
+{% block title %}Gallery – All Artworks{% endblock %}
 
 {% block body %}
-	<main>
-		<h1>Artworks</h1>
+<div class="page-content">
 
-		<form method="get" action="{{ path('artwork_index') }}">
-			<input type="text" name="search" value="{{ search }}" placeholder="Search by title...">
-			<button type="submit">Search</button>
-		</form>
+    <div class="page-header">
+        <h1 class="page-title">Gallery</h1>
+        <a href="{{ path('artwork_new') }}" class="btn-primary">+ Add Artwork</a>
+    </div>
 
-		<a href="{{ path('artwork_index', { sort: 'ASC' }) }}">Oldest first</a>
-		<a href="{{ path('artwork_index', { sort: 'DESC' }) }}">Newest first</a>
+    <div class="toolbar">
+        <form method="get" action="{{ path('artwork_index') }}" class="search-form">
+            <div class="search-wrap">
+                <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <input type="text" name="search" value="{{ search }}" placeholder="Search artworks…" class="search-input">
+            </div>
+        </form>
+        <div class="sort-links">
+            <a href="{{ path('artwork_index', { sort: 'ASC', search: search }) }}" class="sort-btn">Oldest</a>
+            <a href="{{ path('artwork_index', { sort: 'DESC', search: search }) }}" class="sort-btn">Newest</a>
+        </div>
+    </div>
 
-		{% if artworks is empty %}
-			<p>No artworks found.</p>
-		{% else %}
-			<ul>
-				{% for artwork in artworks %}
-					<li>
-						<h2>{{ artwork.title }}</h2>
-						<p>{{ artwork.description }}</p>
-						<p>Artist:
-							{{ artwork.artist.firstName }}
-							{{ artwork.artist.lastName }}</p>
-						<a href="{{ path('artwork_show', { id: artwork.id }) }}">View details</a>
-					</li>
-				{% endfor %}
-			</ul>
-			<div class="pagination">
+    {% if artworks is empty %}
+        <div class="empty-state">
+            <p>No artworks found.</p>
+        </div>
+    {% else %}
+        <div class="artwork-list">
+            {% for artwork in artworks %}
+                <a href="{{ path('artwork_show', { id: artwork.id }) }}" class="artwork-row">
+                    <div class="artwork-row-info">
+                        <span class="artwork-row-title">{{ artwork.title }}</span>
+                        <span class="artwork-row-artist">{{ artwork.artist.firstName }} {{ artwork.artist.lastName }}</span>
+                    </div>
+                    <span class="artwork-row-desc">{{ artwork.description|slice(0, 80) }}{% if artwork.description|length > 80 %}…{% endif %}</span>
+                    <span class="artwork-row-chevron">›</span>
+                </a>
+            {% endfor %}
+        </div>
 
-				{% if currentPage > 1 %}
-					<a href="{{ path('artwork_index', { page: currentPage - 1, sort: sort, search: search }) }}">
-						Previous
-					</a>
-				{% endif %}
+        <div class="pagination">
+            {% if currentPage > 1 %}
+                <a href="{{ path('artwork_index', { page: currentPage - 1, sort: sort, search: search }) }}" class="page-btn">← Prev</a>
+            {% else %}
+                <span class="page-btn page-btn--disabled">← Prev</span>
+            {% endif %}
 
-				<span>Page
-					{{ currentPage }}
-					of
-					{{ totalPages }}</span>
+            <span class="page-info">{{ currentPage }} / {{ totalPages }}</span>
 
-				{% if currentPage < totalPages %}
-					<a href="{{ path('artwork_index', { page: currentPage + 1, sort: sort, search: search }) }}">
-						Next
-					</a>
-				{% endif %}
+            {% if currentPage < totalPages %}
+                <a href="{{ path('artwork_index', { page: currentPage + 1, sort: sort, search: search }) }}" class="page-btn">Next →</a>
+            {% else %}
+                <span class="page-btn page-btn--disabled">Next →</span>
+            {% endif %}
+        </div>
+    {% endif %}
 
-			</div>
-		{% endif %}
-		<a href="{{ path('artwork_new') }}">+ Add Artwork</a>
-	</main>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .page-content {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 3rem 2rem;
+    }
+
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+    }
+
+    .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.55rem 1.2rem;
+        background: var(--text);
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: 500;
+        border-radius: 980px;
+        text-decoration: none;
+        transition: opacity 0.2s;
+    }
+
+    .btn-primary:hover { opacity: 0.82; }
+
+    .toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .search-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 0.75rem;
+        color: var(--text-tertiary);
+        pointer-events: none;
+    }
+
+    .search-input {
+        padding: 0.5rem 0.9rem 0.5rem 2.2rem;
+        font-size: 0.82rem;
+        font-family: var(--font);
+        background: var(--bg-secondary);
+        border: 1px solid transparent;
+        border-radius: 8px;
+        color: var(--text);
+        outline: none;
+        width: 220px;
+        transition: border-color 0.2s, background 0.2s;
+    }
+
+    .search-input:focus {
+        background: var(--bg);
+        border-color: rgba(0,0,0,0.2);
+    }
+
+    .sort-links { display: flex; gap: 0.4rem; }
+
+    .sort-btn {
+        padding: 0.45rem 0.9rem;
+        font-size: 0.78rem;
+        font-weight: 500;
+        font-family: var(--font);
+        color: var(--text-secondary);
+        background: var(--bg-secondary);
+        border-radius: 980px;
+        text-decoration: none;
+        transition: background 0.15s, color 0.15s;
+    }
+
+    .sort-btn:hover { background: #E5E5EA; color: var(--text); }
+
+    /* List */
+    .artwork-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        background: var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        margin-bottom: 1.25rem;
+    }
+
+    .artwork-row {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.25rem;
+        background: var(--bg);
+        text-decoration: none;
+        color: var(--text);
+        transition: background 0.15s;
+    }
+
+    .artwork-row:hover { background: var(--bg-secondary); }
+
+    .artwork-row-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        min-width: 180px;
+    }
+
+    .artwork-row-title {
+        font-size: 0.9rem;
+        font-weight: 500;
+        letter-spacing: -0.01em;
+    }
+
+    .artwork-row-artist {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+    }
+
+    .artwork-row-desc {
+        flex: 1;
+        font-size: 0.78rem;
+        color: var(--text-tertiary);
+        line-height: 1.4;
+    }
+
+    .artwork-row-chevron {
+        font-size: 1.2rem;
+        color: var(--text-tertiary);
+    }
+
+    /* Pagination */
+    .pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        padding-top: 0.5rem;
+    }
+
+    .page-btn {
+        padding: 0.45rem 1rem;
+        font-size: 0.8rem;
+        font-weight: 500;
+        font-family: var(--font);
+        background: var(--bg-secondary);
+        color: var(--text);
+        border-radius: 980px;
+        text-decoration: none;
+        transition: background 0.15s;
+    }
+
+    .page-btn:hover { background: #E5E5EA; }
+
+    .page-btn--disabled {
+        color: var(--text-tertiary);
+        pointer-events: none;
+    }
+
+    .page-info {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        min-width: 60px;
+        text-align: center;
+    }
+
+    .empty-state {
+        padding: 4rem 2rem;
+        text-align: center;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+</style>
 {% endblock %}

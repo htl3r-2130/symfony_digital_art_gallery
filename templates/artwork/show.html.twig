@@ -3,17 +3,153 @@
 {% block title %}{{ artwork.title }}{% endblock %}
 
 {% block body %}
-    <main>
-        <article>
-            <h1>{{ artwork.title }}</h1>
-            <img src="{{ artwork.imagePath }}" alt="{{ artwork.title }}">
-            <p>{{ artwork.description }}</p>
-            <p>Created: {{ artwork.creationDate|date('Y') }}</p>
-            <p>Artist: {{ artwork.artist.firstName }} {{ artwork.artist.lastName }}</p>
-        </article>
+<div class="page-content">
 
-        <nav>
-            <a href="{{ path('artwork_index') }}">← Back to Gallery</a>
-        </nav>
-    </main>
+    <a href="{{ path('artwork_index') }}" class="back-link">← Gallery</a>
+
+    <article class="artwork-detail">
+        {% if artwork.imagePath %}
+            <div class="artwork-image-wrap">
+                <img src="{{ artwork.imagePath }}" alt="{{ artwork.title }}" class="artwork-image">
+            </div>
+        {% endif %}
+
+        <div class="artwork-info">
+            <div class="artwork-meta-top">
+                <span class="artwork-year">{{ artwork.creationDate|date('Y') }}</span>
+            </div>
+            <h1 class="artwork-title">{{ artwork.title }}</h1>
+            <p class="artwork-artist">{{ artwork.artist.firstName }} {{ artwork.artist.lastName }}</p>
+            <p class="artwork-description">{{ artwork.description }}</p>
+
+            <div class="artwork-actions">
+                <a href="{{ path('artwork_edit', { id: artwork.id }) }}" class="btn-secondary">Edit</a>
+                <a href="{{ path('artwork_delete', { id: artwork.id }) }}" class="btn-danger">Delete</a>
+            </div>
+        </div>
+    </article>
+
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .page-content {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 2.5rem 2rem;
+    }
+
+    .back-link {
+        display: inline-block;
+        font-size: 0.82rem;
+        color: var(--text-secondary);
+        text-decoration: none;
+        margin-bottom: 2rem;
+        transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--text); }
+
+    .artwork-detail {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: start;
+    }
+
+    .artwork-image-wrap {
+        border-radius: 16px;
+        overflow: hidden;
+        background: var(--bg-secondary);
+        aspect-ratio: 4/5;
+    }
+
+    .artwork-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .artwork-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        padding-top: 0.5rem;
+    }
+
+    .artwork-meta-top {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .artwork-year {
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--text-tertiary);
+        letter-spacing: 0.04em;
+    }
+
+    .artwork-title {
+        font-size: 2rem;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+        color: var(--text);
+        margin-top: 0.25rem;
+    }
+
+    .artwork-artist {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        font-weight: 400;
+    }
+
+    .artwork-description {
+        font-size: 0.88rem;
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin-top: 0.5rem;
+    }
+
+    .artwork-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .btn-secondary {
+        padding: 0.55rem 1.2rem;
+        font-size: 0.8rem;
+        font-weight: 500;
+        font-family: var(--font);
+        background: var(--bg-secondary);
+        color: var(--text);
+        border-radius: 980px;
+        text-decoration: none;
+        transition: background 0.15s;
+    }
+
+    .btn-secondary:hover { background: #E5E5EA; }
+
+    .btn-danger {
+        padding: 0.55rem 1.2rem;
+        font-size: 0.8rem;
+        font-weight: 500;
+        font-family: var(--font);
+        background: #FFF0F0;
+        color: #D13030;
+        border-radius: 980px;
+        text-decoration: none;
+        transition: background 0.15s;
+    }
+
+    .btn-danger:hover { background: #FFE0E0; }
+
+    @media (max-width: 640px) {
+        .artwork-detail { grid-template-columns: 1fr; gap: 1.5rem; }
+    }
+</style>
 {% endblock %}

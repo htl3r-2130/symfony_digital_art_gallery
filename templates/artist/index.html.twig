@@ -3,21 +3,121 @@
 {% block title %}Artists{% endblock %}
 
 {% block body %}
-    <main>
-        <h1>Artists</h1>
+<div class="page-content">
 
-        {% if artists is empty %}
+    <div class="page-header">
+        <h1 class="page-title">Artists</h1>
+    </div>
+
+    {% if artists is empty %}
+        <div class="empty-state">
             <p>No artists found.</p>
-        {% else %}
-            <ul>
-                {% for artist in artists %}
-                    <li>
-                        <h2>{{ artist.firstName }} {{ artist.lastName }}</h2>
-                        <p>Born: {{ artist.birthDate|date('Y') }}</p>
-                        <a href="{{ path('artist_show', { id: artist.id }) }}">View Profile</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    </main>
+        </div>
+    {% else %}
+        <div class="artist-list">
+            {% for artist in artists %}
+                <a href="{{ path('artist_show', { id: artist.id }) }}" class="artist-row">
+                    <div class="artist-avatar">
+                        {{ artist.firstName|slice(0,1) }}{{ artist.lastName|slice(0,1) }}
+                    </div>
+                    <div class="artist-info">
+                        <span class="artist-name">{{ artist.firstName }} {{ artist.lastName }}</span>
+                        <span class="artist-born">b. {{ artist.birthDate|date('Y') }}</span>
+                    </div>
+                    <span class="artist-chevron">›</span>
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .page-content {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 3rem 2rem;
+    }
+
+    .page-header {
+        margin-bottom: 2rem;
+    }
+
+    .page-title {
+        font-size: 2rem;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+    }
+
+    .artist-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        background: var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+    }
+
+    .artist-row {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.9rem 1.25rem;
+        background: var(--bg);
+        text-decoration: none;
+        color: var(--text);
+        transition: background 0.15s;
+    }
+
+    .artist-row:hover { background: var(--bg-secondary); }
+
+    .artist-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.72rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+        letter-spacing: 0.02em;
+        flex-shrink: 0;
+    }
+
+    .artist-info {
+        flex: 1;
+        display: flex;
+        align-items: baseline;
+        gap: 0.75rem;
+    }
+
+    .artist-name {
+        font-size: 0.9rem;
+        font-weight: 500;
+        letter-spacing: -0.01em;
+    }
+
+    .artist-born {
+        font-size: 0.75rem;
+        color: var(--text-tertiary);
+    }
+
+    .artist-chevron {
+        font-size: 1.2rem;
+        color: var(--text-tertiary);
+    }
+
+    .empty-state {
+        padding: 4rem 2rem;
+        text-align: center;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+</style>
 {% endblock %}
