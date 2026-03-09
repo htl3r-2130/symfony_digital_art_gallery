@@ -43,10 +43,10 @@ class ArtworkRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findPaginated(int $page = 1, int $limit = 5)
+    public function findPaginated(int $page = 1, int $limit = 5, string $order = 'ASC'): array
     {
         return $this->createQueryBuilder('a')
-            ->orderBy('a.creationDate', 'DESC')
+            ->orderBy('a.creationDate', $order)
             ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit)
             ->getQuery()

@@ -19,28 +19,27 @@ class ArtworkController extends AbstractController
     #[Route('/artworks', name: 'artwork_index')]
     public function index(Request $request, ArtworkRepository $artworkRepository): Response
     {
-        $sort = $request->query->get('sort', 'ASC');
+        $sort   = $request->query->get('sort', 'ASC');
         $search = $request->query->get('search', '');
-        $page = $request->query->getInt('page', 1);
-
-        $limit = 5;
+        $page   = $request->query->getInt('page', 1);
+        $limit  = 3;
 
         if ($search) {
             $artworks = $artworkRepository->findByTitle($search);
-            $total = count($artworks);
+            $total    = count($artworks);
         } else {
-            $artworks = $artworkRepository->findPaginated($page, $limit);
-            $total = $artworkRepository->countAll();
+            $artworks = $artworkRepository->findPaginated($page, $limit, $sort);
+            $total    = $artworkRepository->countAll();
         }
 
         $totalPages = ceil($total / $limit);
 
         return $this->render('artwork/index.html.twig', [
-            'artworks' => $artworks,
-            'sort' => $sort,
-            'search' => $search,
+            'artworks'    => $artworks,
+            'sort'        => $sort,
+            'search'      => $search,
             'currentPage' => $page,
-            'totalPages' => $totalPages
+            'totalPages'  => $totalPages
         ]);
     }
 
